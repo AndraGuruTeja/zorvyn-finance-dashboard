@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zorvyn Finance - Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #818cf8; --danger: #f87171; --bg: #0f172a; --text: #f8fafc; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .card { background: rgba(255,255,255,0.05); padding: 2.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 400px; }
+        .card h2 { text-align: center; margin-bottom: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-size: 0.9rem; }
+        input { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; font-size: 1rem; }
+        button { width: 100%; padding: 1rem; border: none; border-radius: 8px; background: var(--primary); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        button:hover { background: #6366f1; }
+        .error { color: var(--danger); font-size: 0.9rem; margin-top: 1rem; text-align: center; display: none; }
+        .link { color: var(--primary); display: block; text-align: center; margin-top: 1.5rem; text-decoration: none; font-size: 0.9rem; }
+        .link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Create Account</h2>
+        <form id="registerForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="regName" required>
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="regEmail" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="regPassword" required>
+            </div>
+            <button type="submit">Sign Up</button>
+            <div id="error-msg" class="error"></div>
+            <a href="index.html" class="link">Already have an account? Login</a>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if (getToken()) { window.location.href = 'dashboard.html'; }
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const errBox = document.getElementById('error-msg');
+            
+            errBox.style.display = 'none';
+
+            // Frontend Validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errBox.innerText = "Invalid email format";
+                errBox.style.display = 'block';
+                return;
+            }
+            if (password.length < 6) {
+                errBox.innerText = "Password must be at least 6 characters";
+                errBox.style.display = 'block';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/auth/register`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const json = await res.json();
+                
+                if (!res.ok) {
+                    if (json.errors && json.errors.length > 0) throw new Error(json.errors[0]);
+                    throw new Error(json.error || "Registration failed");
+                }
+                
+                if (json.success) {
+                    alert('Registration successful! Please login.');
+                    window.location.href = 'index.html';
+                }
+            } catch (err) {
+                errBox.innerText = err.message || "Something went wrong. Try again";
+                errBox.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

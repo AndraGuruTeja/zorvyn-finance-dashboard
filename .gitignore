@@ -1,0 +1,34 @@
+# Compiled class file
+target/
+*.class
+
+# Log files
+*.log
+compile_log.txt
+error.txt
+run_output.txt
+
+# Package objects
+*.jar
+*.war
+*.ear
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+data/
+*.db
+
+# Env
+.env
