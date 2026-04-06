@@ -5,10 +5,11 @@ A simple but effective personal finance management system built with Spring Boot
 ## Tech Stack
 *   **Backend:** Java 17, Spring Boot 3.2.5, Spring Security (JWT)
 *   **Database:** H2 (for development/testing), PostgreSQL (for production)
-*   **Frontend:** HTML5, CSS3, Vanilla JavaScript (no frameworks)
+*   **Frontend:** HTML5, CSS3, Vanilla JavaScript (no frameworks) — **Located in `src/main/resources/static`**
 *   **API Specs:** Swagger UI / OpenAPI 3.0
 
 ## Features
+*   **Unified Serving:** The entire app runs on a single port (**9090**). No separate server is required for the frontend.
 *   **JWT Auth:** Secure login and registration with token-based sessions.
 *   **Role-Based Access (RBAC):** 
     *   `ADMIN` - Can do everything: manage users and all financial records.
